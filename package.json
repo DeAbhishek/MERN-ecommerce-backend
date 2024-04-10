@@ -1,0 +1,30 @@
+{
+  "name": "mern-ecommerce-backend",
+  "version": "1.0.0",
+  "description": "This is a backend project for MERN-ecommerce-frontend using  nodeJS express and mongodb.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeAbhishek/MERN-ecommerce-backend.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "ExpressJS",
+    "MongoDB"
+  ],
+  "author": "Abhishek De",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeAbhishek/MERN-ecommerce-backend/issues"
+  },
+  "homepage": "https://github.com/DeAbhishek/MERN-ecommerce-backend#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.1"
+  }
+}
