@@ -1,9 +1,10 @@
 const productRouter = require("./routes/product");
+const categoryRouter = require("./routes/category");
+const brandRouter = require("./routes/brand");
 const express = require("express");
 const server = express();
 
 const mongoose = require("mongoose");
-
 
 //middleware
 
@@ -21,6 +22,8 @@ async function main() {
 //routes for products
 
 server.use("/products", productRouter);
+server.use("/category", categoryRouter);
+server.use("/brand", brandRouter);
 
 server.listen(8080, () => {
   console.log("Example app listening on port 8080!");
