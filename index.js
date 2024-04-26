@@ -22,8 +22,8 @@ async function main() {
 //routes for products
 
 server.use("/products", productRouter);
-server.use("/category", categoryRouter);
-server.use("/brand", brandRouter);
+server.use("/categories", categoryRouter);
+server.use("/brands", brandRouter);
 
 server.listen(8080, () => {
   console.log("Example app listening on port 8080!");

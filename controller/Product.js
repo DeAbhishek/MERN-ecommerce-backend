@@ -39,9 +39,32 @@ exports.fetchAllProducts = async (req, res) => {
   try {
     const docs = await query.exec();
     const totalDoc = await totalProductsQuery.count().exec();
-    console.log(totalDoc);
     res.set("X-Total-Count", totalDoc);
     res.status(200).json(docs);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.fetchProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.updateProductById = async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
