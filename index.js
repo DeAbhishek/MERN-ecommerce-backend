@@ -1,13 +1,18 @@
 const productRouter = require("./routes/product");
 const categoryRouter = require("./routes/category");
 const brandRouter = require("./routes/brand");
+const cors = require("cors");
 const express = require("express");
 const server = express();
 
 const mongoose = require("mongoose");
 
 //middleware
-
+server.use(
+  cors({
+    exposedHeaders: ["X-Total-Count"],
+  })
+);
 server.use(express.json());
 
 main().catch((err) => {
