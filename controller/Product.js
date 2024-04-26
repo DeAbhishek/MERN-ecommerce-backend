@@ -11,24 +11,36 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.fetchAllProducts = async (req, res) => {
-  let query = Product.findOne({});
+  let query = Product.find({});
+  let totalProductsQuery = Product.find({});
 
   if (req.query.category) {
     query = query.find({ category: req.query.category });
+    totalProductsQuery = totalProductsQuery.find({
+      category: req.query.category,
+    });
   }
   if (req.query.brand) {
     query = query.find({ brand: req.query.brand });
+    totalProductsQuery = totalProductsQuery.find({ brand: req.query.brand });
   }
   if (req.query._sort && req.query._order) {
-    query = query.find({ [req.query._sort]: req.query._order });
+    query = query.sort({ [req.query._sort]: req.query._order });
+    totalProductsQuery = totalProductsQuery.sort({
+      [req.query._sort]: req.query._order,
+    });
   }
-  if (req.query.page && req.query.limit) {
-    const page = Number(req.query.page);
-    const limit = Number(req.query.limit);
-    query = query.skip(limit * (page - 1)).limit(page);
+
+  if (req.query._page && req.query._limit) {
+    const pageSize = Number(req.query._limit);
+    const page = Number(req.query._page);
+    query = query.skip(pageSize * (page - 1)).limit(pageSize);
   }
   try {
     const docs = await query.exec();
+    const totalDoc = await totalProductsQuery.count().exec();
+    console.log(totalDoc);
+    res.set("X-Total-Count", totalDoc);
     res.status(200).json(docs);
   } catch (error) {
     res.status(400).json({ message: error.message });
