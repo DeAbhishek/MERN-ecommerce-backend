@@ -14,8 +14,9 @@ exports.fetchCartByUser = async (req, res) => {
 exports.addToCart = async (req, res) => {
   const cart = new Cart(req.body);
   try {
-    await cart.save();
-    res.status(201).json(cart);
+    const doc = await cart.save();
+    const result= await doc.populate("product");
+    res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
