@@ -21,6 +21,7 @@ exports.loginUser = async (req, res) => {
           id: user.id,
           email: user.email,
           name: user.name,
+          role:user.role,
           message: "Login successful",
         })
       : res.status(400).json({ message: "Invalid email or password" });
