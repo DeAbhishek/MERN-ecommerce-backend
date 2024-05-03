@@ -24,15 +24,6 @@ exports.loginUser = async (req, res) => {
           message: "Login successful",
         })
       : res.status(400).json({ message: "Invalid email or password" });
-
-    // if(!user){
-    //   return res.status(404).json({message:"User not found"});
-    // }
-    // const isMatch=await user.matchPassword(req.body.password);
-    // if(!isMatch){
-    //   return res.status(400).json({message:"Invalid email or password"});
-    // }
-    // res.status(200).json({message:"Login successful"});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -10,6 +10,7 @@ const brandRouter = require("./routes/brand");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const cartRouter = require("./routes/cart");
+const orderRouter = require("./routes/order");
 
 //middleware
 
@@ -41,6 +42,7 @@ server.use("/brands", brandRouter);
 server.use("/users", userRouter);
 server.use("/auth", authRouter);
 server.use("/cart", cartRouter);
+server.use("/orders", orderRouter);
 
 // connet the server to 8080 port
 server.listen(8080, () => {

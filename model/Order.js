@@ -6,19 +6,19 @@ const orderSchema = new Schema({
   totalAmount: Number,
   totalItems: Number,
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  paymentMethod: { type: Number, required: true },
+  paymentMethod: { type: String, required: true },
   status: { type: String, default: "pending" },
   selectedAddress: { type: Schema.Types.Mixed, required: true },
 });
 
 // for change _id to id and delete __v in response
 
-const virtual = userSchema.virtual("id");
+const virtual = orderSchema.virtual("id");
 virtual.get(function () {
   return this._id;
 });
 
-userSchema.set("toJSON", {
+orderSchema.set("toJSON", {
   virtuals: true,
   transform: (doc, ret) => {
     delete ret._id;
