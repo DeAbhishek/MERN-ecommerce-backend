@@ -35,7 +35,7 @@ exports.updateCart = async (req,res)=>{
   try {
     const doc = await Cart.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-    });
+    }).populate("product");
     res.status(200).json(doc);
   } catch (error) {
     res.status(400).json({ message: error.message });

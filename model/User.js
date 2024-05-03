@@ -27,6 +27,9 @@ const userSchema = new Schema({
   addresses: {
     type: [
       {
+        email:{type: String},
+        name: { type: String, required: [true, "Name must be require."] },
+        phone: { type: Number, required: [true, "Phone must be require."] },
         street: { type: String, required: [true, "Address must be require."] },
         city: { type: String, required: [true, "City must be require."] },
         state: { type: String, required: [true, "State must be require."] },
