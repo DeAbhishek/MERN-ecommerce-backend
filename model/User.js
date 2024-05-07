@@ -27,7 +27,7 @@ const userSchema = new Schema({
   addresses: {
     type: [
       {
-        email:{type: String},
+        email: { type: String },
         name: { type: String, required: [true, "Name must be require."] },
         phone: { type: Number, required: [true, "Phone must be require."] },
         street: { type: String, required: [true, "Address must be require."] },
@@ -37,7 +37,7 @@ const userSchema = new Schema({
       },
     ],
   },
-  orders: { type: [Schema.Types.Mixed] },
+  orders: { type: Schema.Types.Mixed },
 });
 
 // for change _id to id and delete __v in response

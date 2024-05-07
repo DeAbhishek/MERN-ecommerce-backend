@@ -3,12 +3,14 @@ const {
   createOrder,
   deleteOrder,
   updateOrder,
+  fetchAllOrders,
 } = require("../controller/Order");
 
 const router = require("express").Router();
 
 router
-  .get("/", fetchOrderByUser)
+  .get("/", fetchAllOrders)
+  .get("/user/:userId", fetchOrderByUser)
   .post("/", createOrder)
   .delete("/:id", deleteOrder)
   .patch("/:id", updateOrder);
