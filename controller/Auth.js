@@ -3,8 +3,8 @@ const { User } = require("../model/User");
 exports.createUser = async (req, res) => {
   const user = new User(req.body);
   try {
-    await user.save();
-    res.status(201).json(user);
+    const doc = await user.save();
+    res.status(201).json({ id: doc.id, role: doc.role });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -19,9 +19,7 @@ exports.loginUser = async (req, res) => {
       : user.password === req.body.password
       ? res.status(200).json({
           id: user.id,
-          email: user.email,
-          name: user.name,
-          role:user.role,
+          role: user.role,
           message: "Login successful",
         })
       : res.status(400).json({ message: "Invalid email or password" });
