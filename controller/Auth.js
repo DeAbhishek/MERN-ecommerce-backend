@@ -22,4 +22,6 @@ exports.loginUser = async (req, res) => {
   res.json(req.user);
 };
 
-
+exports.checkUser = async (req, res) => {
+  res.json(req.user);
+};

@@ -80,16 +80,19 @@ passport.use(
   })
 );
 
-// serializeUser and deserializeUser function
+// serializeUser  and deserializeUser function
+
+// Passport uses serializeUser function to persist user data (after successful authentication) into session. Function deserializeUser is used to retrieve user data from session.
 
 passport.serializeUser(function (user, cb) {
-  console.log("serialize", user);
+  console.log("serialize");
   process.nextTick(function () {
     return cb(null, { id: user.id, role: user.role });
   });
 });
 
 passport.deserializeUser(function (user, cb) {
+  console.log("deserialize", user);
   process.nextTick(function () {
     return cb(null, user);
   });
