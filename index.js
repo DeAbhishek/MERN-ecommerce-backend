@@ -49,9 +49,15 @@ async function main() {
   console.log("Connected to MongoDB");
 }
 
+// helper functions
+
+const isAuth = (req, res, done) => {
+  req.user ? done() : res.send(401);
+};
+
 //routes
 
-server.use("/products", productRouter);
+server.use("/products", isAuth, productRouter);
 server.use("/categories", categoryRouter);
 server.use("/brands", brandRouter);
 server.use("/users", userRouter);
@@ -65,7 +71,7 @@ passport.use(
   new LocalStrategy(async function (username, password, done) {
     // by default password uses username
     try {
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ username }); 
       // console.log(username, password, user);
       if (!user) {
         return done(null, false, { message: "invalid credentials" }); // for safety
