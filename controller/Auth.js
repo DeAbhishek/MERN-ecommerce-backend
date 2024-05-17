@@ -1,6 +1,8 @@
 require("dotenv").config();
 const { User } = require("../model/User");
 const bcrypt = require("bcrypt");
+const { sanitizeUser } = require('../services/common');
+
 
 exports.createUser = (req, res) => {
   const newUserData = { ...req.body };
@@ -15,7 +17,7 @@ exports.createUser = (req, res) => {
         newUserData.password = hash;
         try {
           const doc = await User.create(newUserData);
-          res.status(201).json({ id: doc.id, role: doc.role });
+          res.status(201).json(sanitizeUser(doc));
         } catch (error) {
           res.status(400).json({ message: error.message });
         }

@@ -17,7 +17,10 @@ const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const cartRouter = require("./routes/cart");
 const orderRouter = require("./routes/order");
+
 const { User } = require("./model/User");
+
+const { isAuth, sanitizeUser } = require('./services/common');
 
 //middleware
 
@@ -52,11 +55,7 @@ async function main() {
   console.log("Connected to MongoDB");
 }
 
-// helper functions
 
-const isAuth = (req, res, done) => {
-  req.user ? done() : res.send(401);
-};
 
 //routes
 
@@ -79,13 +78,13 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "invalid credentials" }); // for safety
       }
-      
+
       const passwordCompare = await bcrypt.compare(password, user.password);
 
       if (!passwordCompare) {
         return done(null, false, { message: "invalid credentials" });
       }
-      done(null, user); // this lines sends to serializer
+      done(null, sanitizeUser(user)); // this lines sends to serializer
     } catch (err) {
       done(err);
     }
@@ -99,7 +98,7 @@ passport.use(
 passport.serializeUser(function (user, cb) {
   console.log("serialize");
   process.nextTick(function () {
-    return cb(null, { id: user.id, role: user.role });
+    return cb(null, user);
   });
 });
 
