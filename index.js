@@ -1,9 +1,11 @@
 require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");
 
 const express = require("express");
 const server = express();
@@ -77,7 +79,10 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "invalid credentials" }); // for safety
       }
-      if (user.password !== password) {
+      
+      const passwordCompare = await bcrypt.compare(password, user.password);
+
+      if (!passwordCompare) {
         return done(null, false, { message: "invalid credentials" });
       }
       done(null, user); // this lines sends to serializer
