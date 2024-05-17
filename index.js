@@ -1,3 +1,4 @@
+require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -21,7 +22,7 @@ const { User } = require("./model/User");
 // session middleware
 server.use(
   session({
-    secret: "keyboard cat",
+    secret: process.env.SESSION_SECRET,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
   })
@@ -45,7 +46,7 @@ main().catch((err) => {
 });
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/MERN-Ecommerce");
+  await mongoose.connect(process.env.DB_URL);
   console.log("Connected to MongoDB");
 }
 
@@ -71,7 +72,7 @@ passport.use(
   new LocalStrategy(async function (username, password, done) {
     // by default password uses username
     try {
-      const user = await User.findOne({ username }); 
+      const user = await User.findOne({ username });
       // console.log(username, password, user);
       if (!user) {
         return done(null, false, { message: "invalid credentials" }); // for safety
