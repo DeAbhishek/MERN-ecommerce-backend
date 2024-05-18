@@ -1,6 +1,7 @@
 require("dotenv").config();
-const { User } = require("../model/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { User } = require("../model/User");
 const { sanitizeUser } = require("../services/common");
 
 exports.createUser = (req, res) => {
@@ -20,7 +21,10 @@ exports.createUser = (req, res) => {
           req.login(sanitizeUser(doc), function (err) {
             if (err) res.status(400).json({ message: err.message });
             else {
-              res.status(201).json(sanitizeUser(doc));
+              //CREATE TOKEN WITH jsonwebtoken
+              const token = jwt.sign(sanitizeUser(doc), process.env.SECRET_KEY);
+
+              res.status(201).json(token); //if success then send the token as a response
             }
           });
         } catch (error) {

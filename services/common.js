@@ -1,9 +1,7 @@
+const passport = require("passport");
+
 // helper functions
-
-exports.isAuth = (req, res, done) => {
-  req.user ? done() : res.send(401);
-};
-
+exports.isAuth = () => passport.authenticate("jwt"); // this function now help to check the validity of the token
 
 // Prevent to send sensitive data in front end
 exports.sanitizeUser = (user) => {

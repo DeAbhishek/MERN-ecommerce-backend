@@ -5,6 +5,6 @@ const router = require("express").Router();
 router
   .post("/signup", createUser)
   .post("/login", passport.authenticate("local"), loginUser)
-  .get("/check", checkUser);
+  .get("/check", passport.authenticate("jwt"), checkUser);
 
 module.exports = router;

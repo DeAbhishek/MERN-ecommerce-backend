@@ -7,6 +7,10 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const jwt = require("jsonwebtoken");
+
 const express = require("express");
 const server = express();
 
@@ -20,14 +24,14 @@ const orderRouter = require("./routes/order");
 
 const { User } = require("./model/User");
 
-const { isAuth, sanitizeUser } = require('./services/common');
+const { isAuth, sanitizeUser } = require("./services/common");
 
 //middleware
 
 // session middleware
 server.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SECRET_KEY,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
   })
@@ -55,11 +59,9 @@ async function main() {
   console.log("Connected to MongoDB");
 }
 
-
-
 //routes
 
-server.use("/products", isAuth, productRouter);
+server.use("/products", isAuth(), productRouter); // now middleware needs to call because the middleware is written as a normal function not as req res function
 server.use("/categories", categoryRouter);
 server.use("/brands", brandRouter);
 server.use("/users", userRouter);
@@ -67,9 +69,10 @@ server.use("/auth", authRouter);
 server.use("/cart", cartRouter);
 server.use("/orders", orderRouter);
 
-//Configure Password Strategy
+//Configure Password Local Strategy
 
 passport.use(
+  "local", //as a first argument write the strategy name to know which strategy is used
   new LocalStrategy(async function (username, password, done) {
     // by default password uses username
     try {
@@ -84,9 +87,37 @@ passport.use(
       if (!passwordCompare) {
         return done(null, false, { message: "invalid credentials" });
       }
-      done(null, sanitizeUser(user)); // this lines sends to serializer
+      //CREATE TOKEN WITH jsonwebtoken
+
+      const token = jwt.sign(sanitizeUser(user), process.env.SECRET_KEY);
+
+      done(null, token); // this lines sends to serializer
     } catch (err) {
       done(err);
+    }
+  })
+);
+
+//JWT options
+
+const opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = process.env.SECRET_KEY;
+
+//Configure Password JWT Strategy
+
+passport.use(
+  "jwt",
+  new JwtStrategy(opts, async function (jwt_payload, done) {
+    try {
+      const user = await User.findById(jwt_payload.id);
+      if (user) {
+        return done(null, sanitizeUser(user)); // this calls serializer
+      } else {
+        return done(null, false);
+      }
+    } catch (error) {
+      return done(error, false);
     }
   })
 );
@@ -103,7 +134,7 @@ passport.serializeUser(function (user, cb) {
 });
 
 passport.deserializeUser(function (user, cb) {
-  console.log("deserialize", user);
+  console.log("deserialize");
   process.nextTick(function () {
     return cb(null, user);
   });
