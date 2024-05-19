@@ -61,13 +61,13 @@ async function main() {
 
 //routes
 
-server.use("/products", isAuth(), productRouter); // now middleware needs to call because the middleware is written as a normal function not as req res function
+server.use("/products", productRouter); // now middleware needs to call because the middleware is written as a normal function not as req res function
 server.use("/categories", categoryRouter);
 server.use("/brands", brandRouter);
-server.use("/users", userRouter);
+server.use("/users", isAuth(), userRouter);
 server.use("/auth", authRouter);
-server.use("/cart", cartRouter);
-server.use("/orders", orderRouter);
+server.use("/cart", isAuth(), cartRouter);
+server.use("/orders", isAuth(), orderRouter);
 
 //Configure Password Local Strategy
 
