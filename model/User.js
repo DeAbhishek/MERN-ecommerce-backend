@@ -7,8 +7,7 @@ const userSchema = new Schema({
     type: String,
   },
 
-  // passportjs requires the form inputs to have username and password as their name attributes before it will work.
-  username: {
+  email: {
     type: String,
     required: [true, "Please enter a email address"],
     unique: [true, "Sorry this email id is already registered."],

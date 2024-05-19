@@ -73,11 +73,15 @@ server.use("/orders", orderRouter);
 
 passport.use(
   "local", //as a first argument write the strategy name to know which strategy is used
-  new LocalStrategy(async function (username, password, done) {
-    // by default password uses username
+  // by default passwordJs uses username. By using usernameField we can chnage as per schema, no need to change schema
+  new LocalStrategy({ usernameField: "email" }, async function (
+    email,
+    password,
+    done
+  ) {
     try {
-      const user = await User.findOne({ username });
-      // console.log(username, password, user);
+      const user = await User.findOne({ email });
+      // console.log(email, password, user);
       if (!user) {
         return done(null, false, { message: "invalid credentials" }); // for safety
       }
