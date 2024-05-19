@@ -28,6 +28,8 @@ const { isAuth, sanitizeUser } = require("./services/common");
 
 //middleware
 
+server.use(express.static("build"));
+
 // session middleware
 server.use(
   session({
