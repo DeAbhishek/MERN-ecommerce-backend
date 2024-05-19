@@ -95,7 +95,7 @@ passport.use(
 
       const token = jwt.sign(sanitizeUser(user), process.env.SECRET_KEY);
 
-      done(null, token); // this lines sends to serializer
+      done(null, { token }); // this lines sends to serializer // token send into req.user object
     } catch (err) {
       done(err);
     }

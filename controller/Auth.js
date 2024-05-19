@@ -24,7 +24,15 @@ exports.createUser = (req, res) => {
               //CREATE TOKEN WITH jsonwebtoken
               const token = jwt.sign(sanitizeUser(doc), process.env.SECRET_KEY);
 
-              res.status(201).json(token); //if success then send the token as a response
+              //res.cookie() does is set the HTTP Set-Cookie header.
+
+              res
+                .cookie("jwt", token, {
+                  expires: new Date(Date.now() + 3600000), // here cookie will be removed after 3600000 = 1 hours
+                  httpOnly: true,
+                })
+                .status(201)
+                .json(token); //if success then send the token as a response
             }
           });
         } catch (error) {
@@ -36,7 +44,16 @@ exports.createUser = (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  res.json(req.user);
+
+  //res.cookie() does is set the HTTP Set-Cookie header.
+
+  res
+    .cookie("jwt", req.user.token, {
+      expires: new Date(Date.now() + 900000),
+      httpOnly: true,
+    })
+    .status(200)
+    .json(req.user.token);
 };
 
 exports.checkUser = async (req, res) => {
